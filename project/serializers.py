@@ -1,7 +1,5 @@
 from rest_framework import serializers
 from .models import Project
-from rest_framework.permissions import IsAuthenticated
-#from .permissions import IsAdminAuthenticated
 
 
 
@@ -20,8 +18,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         
-        permission_classes = [IsAuthenticated]
-        #permission_classes = [IsAdminAuthenticated]
+        
         project = Project.objects.create(
             title=validated_data["title"],
             description=validated_data["description"],
