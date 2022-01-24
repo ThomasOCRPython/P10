@@ -16,15 +16,15 @@ class ProjectSerializer(serializers.ModelSerializer):
                   ]
         
 
-    def create(self, validated_data):
+    # def create(self, validated_data):
         
         
-        project = Project.objects.create(
-            title=validated_data["title"],
-            description=validated_data["description"],
-            type=validated_data["type"],
-            author_user_id=validated_data['author_user_id']
-        )
+    #     project = Project.objects.create(
+    #         title=validated_data["title"],
+    #         description=validated_data["description"],
+    #         type=validated_data["type"],
+    #         author_user_id=validated_data['author_user_id']
+    #     )
         
 
-        return project
+    #     return project

@@ -13,7 +13,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     #permission_classes = [IsAdminAuthenticated]
 
     
