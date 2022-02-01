@@ -18,17 +18,17 @@ class ProjectListSerializer(serializers.ModelSerializer):
                   ]
         
 
-    def create(self, validated_data):
+    # def create(self, validated_data):
         
         
-        project = Project.objects.create(
-            title=validated_data["title"],
-            description=validated_data["description"],
-            type=validated_data["type"]
-        )
+    #     project = Project.objects.create(
+    #         title=validated_data["title"],
+    #         description=validated_data["description"],
+    #         type=validated_data["type"]
+    #     )
         
 
-        return project
+        #  return project
 class ProjectDetailSerializer(serializers.ModelSerializer):
 
     contributors = serializers.SerializerMethodField()
@@ -50,7 +50,7 @@ class IssueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Issue
-        fields = ['id', 'title', 'descripition', 'tag', 'priority', 'status', 'project_id', 'author_user_id', 'assignee_user', 'created_time']
+        fields = ['id', 'title', 'description', 'tag', 'priority', 'status', 'project_id', 'author_user_id', 'assignee_user', 'created_time']
 
 
     
