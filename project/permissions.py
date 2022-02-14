@@ -10,21 +10,30 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         
+        
         if request.method in permissions.SAFE_METHODS:
             
             return True
         
         return obj.author_user_id == request.user
 
+class IsIssueOwnerOrReadOnly(permissions.BasePermission):
+    message = "Only owner"
 
-class IsOwnerOrContributor(permissions.BasePermission):
-    
+    def has_object_permission(self, request, view,  obj):
+
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj.author_user_id == request.user
+
+                
+class IsCommentOwnerOrReadOnly(permissions.BasePermission):
+    message = "!"
+
 
     def has_object_permission(self, request, view, obj):
-        
+
         if request.method in permissions.SAFE_METHODS:
-            
             return True
-        
-        return models.Project.objects.filter(Q(author_user_id=request.user)|Q(contributor=request.user))
-                
+        return obj.author_user == request.user
