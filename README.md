@@ -40,16 +40,16 @@
 ## Créer une base de données
 
 <span> Lancer les fichiers de migrations :
-*` python manage.py makemigrations `</span>
+    `python manage.py makemigrations`</span>
 
 # <span>Migrer:
-    *` python manage.py migrate `</span>
+    `python manage.py migrate`</span>
 
 
 ## Lancer le serveur
-    *`http://127.0.0.1:8000`.
+    `http://127.0.0.1:8000`
 
 ## Documentation API
 <span>La documentation de l'API est disponible sur :
-    *`https://documenter.getpostman.com/view/19244405/UVkmQGZZ`</span>
+    `https://documenter.getpostman.com/view/19244405/UVkmQGZZ`</span>
 
