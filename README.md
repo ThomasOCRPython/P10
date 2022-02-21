@@ -42,12 +42,12 @@
 <span>Lancer les fichiers de migrations :
     `python manage.py makemigrations`</span>
 
-# <span>Migrer:
-    `python manage.py migrate`</span>
+# Migrer:
+    python manage.py migrate
 
 
 ## Lancer le serveur
-    <span>`http://127.0.0.1:8000`</span>
+    http://127.0.0.1:8000
 
 ## Documentation API
 <span>La documentation de l'API est disponible sur :
