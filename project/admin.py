@@ -1,3 +1,5 @@
-# from django.contrib import admin
+from django.contrib import admin
 
-# Register your models here.
+from project.models import Contributor
+
+admin.site.register(Contributor)

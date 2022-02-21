@@ -1,27 +1,28 @@
-# from django.shortcuts import render
+
 from rest_framework import viewsets
-# from rest_framework.response import Response
+
 from project import serializers, models
 from project.permissions import (
-    IsOwnerOrReadOnly,
-    IsIssueOwnerOrReadOnly,
-    IsCommentOwnerOrReadOnly,
+    IsContributorOrAuthorProjectInIssueView,
+    IsContributorOrAuthorProjectInProjectView,
+    IsContributorOrAuthorProjectInContributorView,
+    IsContributorOrAuthorProjectInCommentView
 )
-# from django.shortcuts import get_object_or_404
+
 from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated,IsContributorOrAuthorProjectInProjectView]
     http_method_names = ["get", "post", "put", "delete"]
     serializer_class = serializers.ProjectListSerializer
-    # detail_serializer_class = serializers.ProjectDetailSerializer
+    
 
     def get_queryset(self):
-        # return models.Project.objects.filter(contributor__user=self.request.user.id)
+        
         return models.Project.objects.filter(
-            Q(author_user_id=self.request.user.id) | Q(contributor=self.request.user.id)
+            Q(author_user_id=self.request.user.id) | Q(contributor__user=self.request.user.id)
         )
 
     def create(self, request, *args, **kwargs):
@@ -41,21 +42,16 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 class ContributorViewset(viewsets.ModelViewSet):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,IsContributorOrAuthorProjectInContributorView]
 
     http_method_names = ["get", "post", "put", "delete"]
     serializer_class = serializers.ContributorSerializer
 
-    # def get_queryset(self):
-    #     return  models.Contributor.objects.all()
+    
     def get_queryset(self):
-
-        return (
-            models.Contributor.objects.filter((
-                Q(user_id=self.request.user.id) | Q(user=self.request.user.id)
-            )
-            & Q(project_id=self.request.user.id))
-        )
+        
+        return models.Contributor.objects.filter(project=self.kwargs["project_pk"])
+                
 
     def create(self, request, *args, **kwargs):
 
@@ -66,7 +62,8 @@ class ContributorViewset(viewsets.ModelViewSet):
 
 
 class IssueViewset(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsIssueOwnerOrReadOnly]
+    
+    permission_classes = [IsAuthenticated, IsContributorOrAuthorProjectInIssueView]
 
     http_method_names = ["get", "post", "put", "delete"]
     serializer_class = serializers.IssueSerializer
@@ -75,16 +72,19 @@ class IssueViewset(viewsets.ModelViewSet):
 
         return models.Issue.objects.filter(
             (
-                Q(author_user_id=self.request.user.id)
+                
+                Q(project_id=self.request.user.id)
                 | Q(assignee_user=self.request.user.id)
             )
-            & Q(project_id=self.request.user.id)
+            
         )
 
     def create(self, request, *args, **kwargs):
+        
 
         request.POST._mutable = True
         request.data["project_id"] = self.kwargs["project_pk"]
+        request.data["author_user_id"]=request.user.pk
         request.data["assignee_user"] = request.user.pk
         request.POST._mutable = False
         return super(IssueViewset, self).create(request, *args, **kwargs)
@@ -98,27 +98,26 @@ class IssueViewset(viewsets.ModelViewSet):
 
 
 class CommentViewset(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsCommentOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsContributorOrAuthorProjectInCommentView]
 
     http_method_names = ["get", "post", "put", "delete"]
     serializer_class = serializers.CommentSerializer
 
-    # def get_queryset(self):
-    #     return  models.Comment.objects.all()
+    
     def get_queryset(self):
-
-        return models.Comment.objects.filter(issue_id=self.kwargs["issues_pk"])
+        
+        return models.Comment.objects.filter(Q(issue_id=self.kwargs["issues_pk"]) | Q(author_user=self.request.user.id))
 
     def create(self, request, *args, **kwargs):
 
         request.POST._mutable = True
-        request.data["author_user_id"] = request.user.pk
-        request.data["issue_id"] = self.kwargs["issues_pk"]
+        request.data["author_user"] = request.user.pk
+        request.data["issue_id"] = kwargs["issues_pk"]
         request.POST._mutable = False
         return super(CommentViewset, self).create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         request.POST._mutable = True
-        request.data["author_user_id"] = request.user.pk
-        request.data["issue_id"] = self.kwargs["issues_pk"]
+        request.data["author_user"] = request.user.pk
+        request.data["issue_id"] = kwargs["issues_pk"]
         return super(CommentViewset, self).update(request, *args, **kwargs)
