@@ -39,7 +39,7 @@
 
 ## Créer une base de données
 
-<span> Lancer les fichiers de migrations :
+<span>Lancer les fichiers de migrations :
     `python manage.py makemigrations`</span>
 
 # <span>Migrer:
@@ -47,7 +47,7 @@
 
 
 ## Lancer le serveur
-    `http://127.0.0.1:8000`
+    <span>`http://127.0.0.1:8000`</span>
 
 ## Documentation API
 <span>La documentation de l'API est disponible sur :
