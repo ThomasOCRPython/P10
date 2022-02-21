@@ -1,4 +1,4 @@
-from asyncore import write
+# from asyncore import write
 from rest_framework import serializers
 from .models import User
 
@@ -6,17 +6,20 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = User
-        fields = ('id',
-                  'first_name',
-                  'last_name',
-                  'email',
-                  'password',
-                  'username',
-                #   'is_active',
-                #   'is_staff',
-                #   'is_admin',
-                  )
-        extra_kwargs = {'password': {'write_only': True,'style':{'input_type':'password'}}}
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "password",
+            "username",
+            #   'is_active',
+            #   'is_staff',
+            #   'is_admin',
+        )
+        extra_kwargs = {
+            "password": {"write_only": True, "style": {"input_type": "password"}}
+        }
 
     def create(self, validated_data):
         return User.objects.create_user(
@@ -37,7 +40,7 @@ class UserSerializer(serializers.ModelSerializer):
     #     )
 
     #     user.set_password(validated_data["password"])
-        
+
     #     return user
 
     # def update(self, instance, validated_data):

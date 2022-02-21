@@ -1,5 +1,6 @@
-from typing_extensions import Required
+# from typing_extensions import Required
 from django.db import models
+
 # from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import AbstractUser
 
@@ -12,7 +13,7 @@ from django.contrib.auth.models import AbstractUser
 #                         email=self.normalize_email(email),
 #                         )
 #         user.set_password(password)
-        
+
 #         user.save()
 #         return user
 

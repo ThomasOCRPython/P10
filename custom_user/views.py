@@ -1,13 +1,11 @@
-from django.shortcuts import render
-
-
 from rest_framework import generics
 from rest_framework.response import Response
-from custom_user import serializers, models
+from custom_user import serializers
 
 # class CustomUserViewSet(viewsets.ModelViewSet):
 #     serializer_class = serializers.CustomUserSerializer
 #     queryset = models.CustomUser.objects.all()
+
 
 class RegisterApi(generics.GenericAPIView):
     serializer_class = serializers.UserSerializer
@@ -18,7 +16,9 @@ class RegisterApi(generics.GenericAPIView):
         user = serializer.save()
         return Response(
             {
-                "user": serializers.UserSerializer(user, context=self.get_serializer_context()).data,
+                "user": serializers.UserSerializer(
+                    user, context=self.get_serializer_context()
+                ).data,
                 "message": "User Created Successfully. Now perform Login to get your token",
             }
         )
