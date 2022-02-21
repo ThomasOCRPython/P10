@@ -51,10 +51,10 @@ class ContributorViewset(viewsets.ModelViewSet):
     def get_queryset(self):
 
         return (
-            models.Contributor.objects.filter(
+            models.Contributor.objects.filter((
                 Q(user_id=self.request.user.id) | Q(user=self.request.user.id)
             )
-            & Q(project_id=self.request.user.id)
+            & Q(project_id=self.request.user.id))
         )
 
     def create(self, request, *args, **kwargs):
